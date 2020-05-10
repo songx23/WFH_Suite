@@ -1,4 +1,4 @@
-module randomchats
+module letschat
 
 go 1.14
 
