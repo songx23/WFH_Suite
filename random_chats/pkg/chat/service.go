@@ -34,6 +34,8 @@ func (s *Service) Process(channelID string, ppg int) error {
 		}
 		userNames = append(userNames, name)
 	}
+	// remove bot users
+	userNames = deleteEmptyStrings(userNames)
 	// randomise user name slice
 	userNames = shuffle(userNames)
 	// split user name slice based on ppg (persons per group)
@@ -45,6 +47,16 @@ func (s *Service) Process(channelID string, ppg int) error {
 		return err
 	}
 	return nil
+}
+
+func deleteEmptyStrings(slice []string) []string {
+	var r []string
+	for _, str := range slice {
+		if str != "" {
+			r = append(r, str)
+		}
+	}
+	return r
 }
 
 func shuffle(slice []string) []string {
@@ -93,5 +105,5 @@ func composeMessage(groups [][]string) string {
 		msgLine := strings.Join(v, " :blob-wine-gif: ")
 		msgs = append(msgs, msgLine)
 	}
-	return strings.Join(msgs, "\\n")
+	return strings.Join(msgs, "\n")
 }

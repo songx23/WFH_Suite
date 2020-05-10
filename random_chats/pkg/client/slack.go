@@ -26,22 +26,27 @@ func NewClient(httpClient *http.Client, baseURL url.URL, token string) *Client {
 
 func (c *Client) GetUserIDsInChannel(channelID string) ([]string, error) {
 	reqURL := c.baseURL
-	queryString := fmt.Sprintf("?token=%s&channel=%s", url.PathEscape(c.oauthToken), url.PathEscape(channelID))
-	reqURL.Path = path.Join(reqURL.Path, "/conversations.members", queryString)
-	req, _ := http.NewRequest(http.MethodGet, reqURL.String(), nil)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	queryString := fmt.Sprintf("token=%s&channel=%s", url.PathEscape(c.oauthToken), url.PathEscape(channelID))
+	reqURL.Path = path.Join(reqURL.Path, "/conversations.members")
+	reqURL.RawQuery = queryString
+	request, _ := http.NewRequest(http.MethodGet, reqURL.String(), nil)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	var memberRes channelMembersResponse
-	if err := httpclient.DoRequest(c.httpClient, req, &memberRes); err != nil {
+	if err := httpclient.DoRequest(c.httpClient, request, &memberRes); err != nil {
 		return []string{}, err
+	}
+	if !memberRes.OK {
+		return []string{}, fmt.Errorf("slack error: %s", memberRes.Err)
 	}
 	return memberRes.Members, nil
 }
 
 func (c *Client) GetUserName(userID string) (string, error) {
 	reqURL := c.baseURL
-	queryString := fmt.Sprintf("?token=%s&user=%s", url.PathEscape(c.oauthToken), url.PathEscape(userID))
-	reqURL.Path = path.Join(reqURL.Path, "/users.info", queryString)
+	queryString := fmt.Sprintf("token=%s&user=%s", url.PathEscape(c.oauthToken), url.PathEscape(userID))
+	reqURL.Path = path.Join(reqURL.Path, "/users.info")
+	reqURL.RawQuery = queryString
 	req, _ := http.NewRequest(http.MethodGet, reqURL.String(), nil)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -49,7 +54,13 @@ func (c *Client) GetUserName(userID string) (string, error) {
 	if err := httpclient.DoRequest(c.httpClient, req, &userRes); err != nil {
 		return "", err
 	}
-	return userRes.User.name, nil
+	if !userRes.OK {
+		return "", fmt.Errorf("slack error: %s", userRes.Err)
+	}
+	if userRes.User.IsBot {
+		return "", nil
+	}
+	return userRes.User.Name, nil
 }
 
 func (c *Client) PostMessage(channelID string, message string) error {
@@ -68,7 +79,7 @@ func (c *Client) PostMessage(channelID string, message string) error {
 	}
 
 	if !msgRes.OK {
-		return fmt.Errorf("Unknown error happened when posting message")
+		return fmt.Errorf("slack error: %s", msgRes.Err)
 	}
 	return nil
 }

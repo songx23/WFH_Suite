@@ -22,7 +22,6 @@ func DoRequest(httpClient *http.Client, req *http.Request, resultTemplate interf
 		}
 		return fmt.Errorf("Status: %d, Error body: %s", res.StatusCode, bodyBytes)
 	}
-
 	if err := render.DecodeJSON(res.Body, &resultTemplate); err != nil {
 		return fmt.Errorf("Couldn't decode message %w", err)
 	}
