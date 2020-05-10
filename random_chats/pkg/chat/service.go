@@ -100,7 +100,7 @@ func composeMessage(groups [][]string) string {
 	msgs := []string{"Good day team:roller_coaster:. The random chat roster of this week :scroll::"}
 	for _, v := range groups {
 		for i := range v {
-			v[i] = fmt.Sprintf("@%s", v[i])
+			v[i] = fmt.Sprintf("<@%s>", v[i])
 		}
 		msgLine := strings.Join(v, " :blob-wine-gif: ")
 		msgs = append(msgs, msgLine)

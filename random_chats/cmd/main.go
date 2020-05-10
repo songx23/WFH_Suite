@@ -1,20 +1,26 @@
-package main
+package letschat
 
 import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
+	"strconv"
 
 	"randomchats/pkg/chat"
 	slack "randomchats/pkg/client"
 )
 
-func main() {
+func LetsChat(w http.ResponseWriter, r *http.Request) {
 	httpClient := http.DefaultClient
 	// get from env var
-	oauthToken := ""
-	channelID := ""
-	personPerGroup := 3
+	oauthToken := os.Getenv("OAUTH_KEY")
+	channelID := os.Getenv("CHANNEL_ID")
+	personPerGroup, err := strconv.Atoi(os.Getenv("PER_GROUP"))
+	if err != nil {
+		fmt.Printf("Invalid person per group")
+		return
+	}
 	slackUrl, _ := url.Parse("https://slack.com/api")
 	slackClient := slack.NewClient(httpClient, *slackUrl, oauthToken)
 	service := chat.NewService(slackClient)

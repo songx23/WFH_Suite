@@ -41,3 +41,10 @@ func TestComposeMessage(t *testing.T) {
 	expected := "Good day team:roller_coaster:. The random chat roster of this week :scroll::\\n@a :blob-wine-gif: @b :blob-wine-gif: @c\\n@d :blob-wine-gif: @e"
 	assert.Equal(t, expected, msg)
 }
+
+func TestShuffle(t *testing.T) {
+	testData := []string{"a", "b", "c", "d", "e"}
+	randomize := shuffle(testData)
+	assert.Len(t, randomize, 5)
+	assert.NotEqual(t, randomize, testData)
+}
