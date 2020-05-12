@@ -88,7 +88,7 @@ func getPublicHoliday() []time.Time {
 }
 
 func formatDayToEmoji(day string) string {
-	result := []string{}
+	var result []string
 	for _, c := range strings.Split(day, "") {
 		switch c {
 		case "1":
@@ -116,10 +116,43 @@ func formatDayToEmoji(day string) string {
 	return strings.Join(result, "")
 }
 
+func formatCountDown(start time.Time, end time.Time) string {
+	days := math.Ceil(end.Sub(start).Hours() / 24)
+	switch {
+	case days < 0:
+		return ""
+	case days == 0:
+		return "TODAY! :blob-cheer-gif:"
+	case days == 1:
+		return "TMR! :blob-student:"
+	default:
+		return fmt.Sprintf("in %v days. :blob-wobble-gif:", formatDayToEmoji(fmt.Sprintf("%g", days)))
+	}
+}
+
+func getCountdownLines(now time.Time) string {
+	stage1SchoolBackDate := time.Date(2020, 5, 26, 0, 0, 0, 0, time.Local)
+	stage2SchoolBackDate := time.Date(2020, 6, 9, 0, 0, 0, 0, time.Local)
+	result := "School count downs: \n"
+	var addition string
+	st1 := formatCountDown(now, stage1SchoolBackDate)
+	if st1 != "" {
+		addition = addition + fmt.Sprintf("Stage 1 back-to-school is %s\n", st1)
+	}
+	st2 := formatCountDown(now, stage2SchoolBackDate)
+	if st2 != "" {
+		addition = addition + fmt.Sprintf("Stage 2 back-to-school is %s", st2)
+	}
+	if addition == "" {
+		return ""
+	}
+	return result + addition
+}
+
 func getMessage() string {
 	loc, err := time.LoadLocation("Australia/Melbourne")
 	if err != nil {
-		fmt.Errorf(err)
+		fmt.Printf("%v\n", err)
 		return ""
 	}
 	//set timezone,
@@ -129,11 +162,13 @@ func getMessage() string {
 		Good morning team! :blob-sun-gif: Today is %v, %v. 
 %v
 Cake Day is %v
+%s
 		`,
 		getCurrentDate(current),
 		getCurrentDay(current),
 		getWFHLine(current),
-		getCakeDay(current))
+		getCakeDay(current),
+		getCountdownLines(current))
 }
 
 func SendMessage(w http.ResponseWriter, r *http.Request) {
@@ -150,5 +185,5 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("%s\n", err)
 		return
 	}
-	fmt.Fprintf(w, "Message successfully sent to channel %s at %s", channelID, timestamp)
+	_, _ = fmt.Fprintf(w, "Message successfully sent to channel %s at %s", channelID, timestamp)
 }
