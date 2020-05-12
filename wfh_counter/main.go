@@ -88,7 +88,7 @@ func getPublicHoliday() []time.Time {
 }
 
 func formatDayToEmoji(day string) string {
-	result := []string{}
+	var result []string
 	for _, c := range strings.Split(day, "") {
 		switch c {
 		case "1":
@@ -126,7 +126,7 @@ func formatCountDown(start time.Time, end time.Time) string {
 	case days == 1:
 		return "TMR! :blob-student:"
 	default:
-		return fmt.Sprintf("in %v days. :blob-wobble-gif:", days)
+		return fmt.Sprintf("in %v days. :blob-wobble-gif:", formatDayToEmoji(fmt.Sprintf("%g", days)))
 	}
 }
 
@@ -185,5 +185,5 @@ func SendMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("%s\n", err)
 		return
 	}
-	fmt.Fprintf(w, "Message successfully sent to channel %s at %s", channelID, timestamp)
+	_, _ = fmt.Fprintf(w, "Message successfully sent to channel %s at %s", channelID, timestamp)
 }
