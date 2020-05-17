@@ -37,27 +37,27 @@ func getCakeDay(now time.Time) string {
 	}
 }
 
-func getWFHLine(now time.Time) string {
-	holidays := getPublicHoliday()
+func getWFHLine(now time.Time, loc *time.Location) string {
+	holidays := getPublicHoliday(loc)
 	for _, h := range holidays {
 		diff := math.Abs(h.Sub(now).Hours())
 		if now.After(h) && diff < 24 {
 			return "Today is public holiday. Happy holiday team! :blob-wobble-gif:"
 		}
 	}
-	return fmt.Sprintf("WFH Day #%v", getWFHCount(now))
+	return fmt.Sprintf("WFH Day #%v", getWFHCount(now, loc))
 }
 
-func getWFHCount(now time.Time) string {
+func getWFHCount(now time.Time, loc *time.Location) string {
 	// WFH started on March 19th 2020
-	start := time.Date(2020, 3, 22, 0, 0, 0, 0, time.Local)
+	start := time.Date(2020, 3, 22, 0, 0, 0, 0, loc)
 	diffWeeks := math.Floor(now.Sub(start).Hours() / 24 / 7)
-	days := diffWeeks*5 + 2 - getHolidayCount(now) + float64(now.Weekday())
+	days := diffWeeks*5 + 2 - getHolidayCount(now, loc) + float64(now.Weekday())
 	return formatDayToEmoji(fmt.Sprint(days))
 }
 
-func getHolidayCount(now time.Time) float64 {
-	holidays := getPublicHoliday()
+func getHolidayCount(now time.Time, loc *time.Location) float64 {
+	holidays := getPublicHoliday(loc)
 	count := 0.0
 	for _, h := range holidays {
 		if now.After(h) {
@@ -67,15 +67,15 @@ func getHolidayCount(now time.Time) float64 {
 	return count
 }
 
-func getPublicHoliday() []time.Time {
+func getPublicHoliday(loc *time.Location) []time.Time {
 	// Only included the public holidays in 2020. Really hope that we won't need 2021!
-	EasterFriday := time.Date(2020, 4, 10, 0, 0, 0, 0, time.Local)
-	EasterMonday := time.Date(2020, 4, 13, 0, 0, 0, 0, time.Local)
-	QueensBirthday := time.Date(2020, 6, 8, 0, 0, 0, 0, time.Local)
-	AFLGrandFinal := time.Date(2020, 9, 25, 0, 0, 0, 0, time.Local)
-	MelbourneCup := time.Date(2020, 11, 3, 0, 0, 0, 0, time.Local)
-	Christmas := time.Date(2020, 12, 25, 0, 0, 0, 0, time.Local)
-	BoxingDay := time.Date(2020, 12, 28, 0, 0, 0, 0, time.Local)
+	EasterFriday := time.Date(2020, 4, 10, 0, 0, 0, 0, loc)
+	EasterMonday := time.Date(2020, 4, 13, 0, 0, 0, 0, loc)
+	QueensBirthday := time.Date(2020, 6, 8, 0, 0, 0, 0, loc)
+	AFLGrandFinal := time.Date(2020, 9, 25, 0, 0, 0, 0, loc)
+	MelbourneCup := time.Date(2020, 11, 3, 0, 0, 0, 0, loc)
+	Christmas := time.Date(2020, 12, 25, 0, 0, 0, 0, loc)
+	BoxingDay := time.Date(2020, 12, 28, 0, 0, 0, 0, loc)
 	return []time.Time{
 		EasterFriday,
 		EasterMonday,
@@ -130,9 +130,9 @@ func formatCountDown(start time.Time, end time.Time) string {
 	}
 }
 
-func getCountdownLines(now time.Time) string {
-	stage1SchoolBackDate := time.Date(2020, 5, 26, 0, 0, 0, 0, time.Local)
-	stage2SchoolBackDate := time.Date(2020, 6, 9, 0, 0, 0, 0, time.Local)
+func getCountdownLines(now time.Time, loc *time.Location) string {
+	stage1SchoolBackDate := time.Date(2020, 5, 26, 0, 0, 0, 0, loc)
+	stage2SchoolBackDate := time.Date(2020, 6, 9, 0, 0, 0, 0, loc)
 	result := "School count downs: \n"
 	var addition string
 	st1 := formatCountDown(now, stage1SchoolBackDate)
@@ -166,9 +166,9 @@ Cake Day is %v
 		`,
 		getCurrentDate(current),
 		getCurrentDay(current),
-		getWFHLine(current),
+		getWFHLine(current, loc),
 		getCakeDay(current),
-		getCountdownLines(current))
+		getCountdownLines(current, loc))
 }
 
 func SendMessage(w http.ResponseWriter, r *http.Request) {

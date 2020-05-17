@@ -28,18 +28,20 @@ func TestFormatCountDown(t *testing.T) {
 }
 
 func TestGetCountDownLines(t *testing.T) {
+	loc, err := time.LoadLocation("Australia/Melbourne")
+	assert.NoError(t, err)
 	now := time.Date(2020, 6, 10, 8, 0, 0, 0, time.Local)
-	res := getCountdownLines(now)
+	res := getCountdownLines(now, loc)
 	assert.Equal(t, "",
 		res)
 
 	now = time.Date(2020, 5, 27, 8, 0, 0, 0, time.Local)
-	res = getCountdownLines(now)
+	res = getCountdownLines(now, loc)
 	assert.Equal(t, "School count downs: \nStage 2 back-to-school is in :one::three: days. :blob-wobble-gif:",
 		res)
 
 	now = time.Date(2020, 5, 26, 8, 0, 0, 0, time.Local)
-	res = getCountdownLines(now)
+	res = getCountdownLines(now, loc)
 	assert.Equal(t, "School count downs: \nStage 1 back-to-school is TODAY! :blob-cheer-gif:\nStage 2 back-to-school is in :one::four: days. :blob-wobble-gif:",
 		res)
 }
