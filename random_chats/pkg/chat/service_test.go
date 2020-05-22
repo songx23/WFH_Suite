@@ -38,7 +38,7 @@ func TestSplitGroups(t *testing.T) {
 func TestComposeMessage(t *testing.T) {
 	testData := [][]string{{"a", "b", "c"}, {"d", "e"}}
 	msg := composeMessage(testData)
-	expected := "Good day team:roller_coaster:. The random chat roster of this week :scroll::\\n@a :blob-wine-gif: @b :blob-wine-gif: @c\\n@d :blob-wine-gif: @e"
+	expected := "Good day team:roller_coaster:. The random chat roster of this week :scroll::\nGroup 1: <@a> :blob-wine-gif: <@b> :blob-wine-gif: <@c>\nGroup 2: <@d> :blob-wine-gif: <@e>"
 	assert.Equal(t, expected, msg)
 }
 
