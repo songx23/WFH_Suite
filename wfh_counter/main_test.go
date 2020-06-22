@@ -37,11 +37,11 @@ func TestGetCountDownLines(t *testing.T) {
 
 	now = time.Date(2020, 6, 23, 8, 0, 0, 0, time.Local)
 	res = getCountdownLines(now, loc)
-	assert.Equal(t, "Term 3 back-to-school count down: \nTerm 3 back-to-school is in :two::one: days.\n",
+	assert.Equal(t, "School count downs: \nTerm 3 back-to-school is in :two::one: days.\n",
 		res)
 
 	now = time.Date(2020, 7, 14, 8, 0, 0, 0, time.Local)
 	res = getCountdownLines(now, loc)
-	assert.Equal(t, "Term 3 back-to-school count down: \nTerm 3 back-to-school is TODAY! :blob-cheer-gif:\n",
+	assert.Equal(t, "School count downs: \nTerm 3 back-to-school is TODAY! :blob-cheer-gif:\n",
 		res)
 }

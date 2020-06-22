@@ -132,7 +132,7 @@ func formatCountDown(start time.Time, end time.Time) string {
 
 func getCountdownLines(now time.Time, loc *time.Location) string {
 	term3SchoolBackDate := time.Date(2020, 7, 14, 0, 0, 0, 0, loc)
-	result := "Term 3 back-to-school count down: \n"
+	result := "School count downs: \n"
 	var addition string
 	st1 := formatCountDown(now, term3SchoolBackDate)
 	if st1 != "" {
