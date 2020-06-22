@@ -126,22 +126,17 @@ func formatCountDown(start time.Time, end time.Time) string {
 	case days == 1:
 		return "TMR! :blob-student:"
 	default:
-		return fmt.Sprintf("in %v days. :blob-wobble-gif:", formatDayToEmoji(fmt.Sprintf("%g", days)))
+		return fmt.Sprintf("in %v days.", formatDayToEmoji(fmt.Sprintf("%g", days)))
 	}
 }
 
 func getCountdownLines(now time.Time, loc *time.Location) string {
-	stage1SchoolBackDate := time.Date(2020, 5, 26, 0, 0, 0, 0, loc)
-	stage2SchoolBackDate := time.Date(2020, 6, 9, 0, 0, 0, 0, loc)
-	result := "School count downs: \n"
+	term3SchoolBackDate := time.Date(2020, 7, 14, 0, 0, 0, 0, loc)
+	result := "Term 3 back-to-school count down: \n"
 	var addition string
-	st1 := formatCountDown(now, stage1SchoolBackDate)
+	st1 := formatCountDown(now, term3SchoolBackDate)
 	if st1 != "" {
-		addition = addition + fmt.Sprintf("Stage 1 back-to-school is %s\n", st1)
-	}
-	st2 := formatCountDown(now, stage2SchoolBackDate)
-	if st2 != "" {
-		addition = addition + fmt.Sprintf("Stage 2 back-to-school is %s", st2)
+		addition = addition + fmt.Sprintf("Term 3 back-to-school is %s\n", st1)
 	}
 	if addition == "" {
 		return ""
