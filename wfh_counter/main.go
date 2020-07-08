@@ -131,12 +131,26 @@ func formatCountDown(start time.Time, end time.Time) string {
 }
 
 func getCountdownLines(now time.Time, loc *time.Location) string {
-	term3SchoolBackDate := time.Date(2020, 7, 14, 0, 0, 0, 0, loc)
+	term3SchoolBackDate := time.Date(2020, 7, 21, 0, 0, 0, 0, loc)
 	result := "School count downs: \n"
 	var addition string
 	st1 := formatCountDown(now, term3SchoolBackDate)
 	if st1 != "" {
 		addition = addition + fmt.Sprintf("Term 3 back-to-school is %s\n", st1)
+	}
+	if addition == "" {
+		return ""
+	}
+	return result + addition
+}
+
+func getLockdownLines(now time.Time, loc *time.Location) string {
+	lockDownEndDate := time.Date(2020, 8, 19, 0, 0, 0, 0, loc)
+	result := "Freedom count down: \n"
+	var addition string
+	st := formatCountDown(now, lockDownEndDate)
+	if st != "" {
+		addition = addition + fmt.Sprintf("Lockdown ends %s\n", st)
 	}
 	if addition == "" {
 		return ""
@@ -158,12 +172,14 @@ func getMessage() string {
 %v
 Cake Day is %v
 %s
+%s
 		`,
 		getCurrentDate(current),
 		getCurrentDay(current),
 		getWFHLine(current, loc),
 		getCakeDay(current),
-		getCountdownLines(current, loc))
+		getCountdownLines(current, loc),
+		getLockdownLines(current, loc))
 }
 
 func SendMessage(w http.ResponseWriter, r *http.Request) {
