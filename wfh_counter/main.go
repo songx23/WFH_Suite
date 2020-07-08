@@ -150,7 +150,7 @@ func getLockdownLines(now time.Time, loc *time.Location) string {
 	var addition string
 	st := formatCountDown(now, lockDownEndDate)
 	if st != "" {
-		addition = addition + fmt.Sprintf("Lockdown ends %s\n", st)
+		addition = addition + fmt.Sprintf("Melbourne lockdown ends %s\n", st)
 	}
 	if addition == "" {
 		return ""
