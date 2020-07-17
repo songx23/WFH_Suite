@@ -1,4 +1,4 @@
-module wfhcounter
+module github.com/songx23/wfhcounter
 
 go 1.13
 

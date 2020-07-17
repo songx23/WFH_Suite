@@ -1,4 +1,4 @@
-module letschat
+module github.com/songx23/letschat
 
 go 1.13
 
