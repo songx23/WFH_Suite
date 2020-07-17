@@ -1,6 +1,6 @@
 module letschat
 
-go 1.14
+go 1.13
 
 require (
 	github.com/go-chi/render v1.0.1
