@@ -1,4 +1,4 @@
-package random_chats
+package letschat
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"os"
 	"strconv"
 
-	"letschat/pkg/chat"
-	slack "letschat/pkg/client"
+	"github.com/songx23/letschat/pkg/chat"
+	slack "github.com/songx23/letschat/pkg/client"
 )
 
 func LetsChat(w http.ResponseWriter, r *http.Request) {

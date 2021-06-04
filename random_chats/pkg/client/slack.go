@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	"letschat/pkg/httpclient"
+	"github.com/songx23/letschat/pkg/httpclient"
 )
 
 type Client struct {

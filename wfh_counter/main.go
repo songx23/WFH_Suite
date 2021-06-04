@@ -42,7 +42,7 @@ func getWFHLine(now time.Time, loc *time.Location) string {
 	for _, h := range holidays {
 		diff := math.Abs(h.Sub(now).Hours())
 		if now.After(h) && diff < 24 {
-			return "Today is public holiday. Happy holiday team! :blob-wobble-gif:"
+			return "Happy holiday team! :blob-wobble-gif:"
 		}
 	}
 	return fmt.Sprintf("WFH Day #%v", getWFHCount(now, loc))
@@ -72,10 +72,15 @@ func getPublicHoliday(loc *time.Location) []time.Time {
 	EasterFriday := time.Date(2020, 4, 10, 0, 0, 0, 0, loc)
 	EasterMonday := time.Date(2020, 4, 13, 0, 0, 0, 0, loc)
 	QueensBirthday := time.Date(2020, 6, 8, 0, 0, 0, 0, loc)
-	AFLGrandFinal := time.Date(2020, 9, 25, 0, 0, 0, 0, loc)
+	AFLGrandFinal := time.Date(2020, 10, 24, 0, 0, 0, 0, loc)
 	MelbourneCup := time.Date(2020, 11, 3, 0, 0, 0, 0, loc)
 	Christmas := time.Date(2020, 12, 25, 0, 0, 0, 0, loc)
 	BoxingDay := time.Date(2020, 12, 28, 0, 0, 0, 0, loc)
+	// Christmas break
+	Holiday1 := time.Date(2020, 12, 29, 0, 0, 0, 0, loc)
+	Holiday2 := time.Date(2020, 12, 30, 0, 0, 0, 0, loc)
+	Holiday3 := time.Date(2020, 12, 31, 0, 0, 0, 0, loc)
+
 	return []time.Time{
 		EasterFriday,
 		EasterMonday,
@@ -84,6 +89,9 @@ func getPublicHoliday(loc *time.Location) []time.Time {
 		MelbourneCup,
 		Christmas,
 		BoxingDay,
+		Holiday1,
+		Holiday2,
+		Holiday3,
 	}
 }
 
