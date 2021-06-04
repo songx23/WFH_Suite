@@ -29,19 +29,19 @@ writes/day and 10Gb network egress/month, which should be plenty for this use ca
 ![design-img](slack.png)
 
 *Note: the free quotas mentioned above are applied to per billing account. For MantelGroup, we might already have other
-projects that use free quotas. Therefore, running this slackbot might cause a small cost (at most a cup of coffee per
+projects that use free quotas. Therefore, running this slackbot might bear a small cost (at most a cup of coffee per
 month)*
 
 ## Function
 
-The serverless function is the core component that delivers the message to our colleagues. It needs to execute the
+The serverless function is the core component that delivers messages to our colleagues. It needs to execute the
 following steps:
 
 1. Fetch the full list of users in MantelGroup slack
 2. Pick up y% of the users randomly from the list
 3. Send the preconfigured message to those picked users
 
-Sounds pretty simple, right? Let's look into some details.
+Sounds pretty simple, right? Let's dive into the details.
 
 ### Slack API: Authentication
 
@@ -76,20 +76,21 @@ This part can be reused.
 
 ### Text of the Invitation
 
-Text of the invitation can be hardcoded in the code. However, this is not going to be easy to change.  
+Text of the invitation can be hardcoded in the code. However, it is not going to be easy to change.  
 To make the changing process easier, we can consider the following ways:
 
 #### File approach
 
-Save the text in a file. The function will read invitation text from this file.  
+Save the text in a file. The function reads invitation text from this file.  
 To update the text, anyone with read access to the source code repo can clone it and update the text in the file.  
-Once that's done, we can use a script to package the function with the updated file and deploy it.
+Once that's done, we can use a script to package the function with the updated file and deploy it 
+(see deployment section).
 
 #### Persist store approach
 
-Save the text in the document-based database. The function will just read text from the database. To update the text,
-anyone can send a HTTP request to a cloud function with desired text payload. This new cloud function is responsible for
-replacing the text stored in database.
+Save the text in the document-based database. The function reads text from the database. To update the text,
+any authorised people can send a HTTP request to a cloud function with desired text payload. This new cloud function is
+responsible for replacing the text stored in database.
 
 ## Deployment
 
@@ -103,7 +104,7 @@ If we decide to use persist store, we can create firestore manually. It's going 
 
 ### Cloud Functions
 
-The gist of cloud functions are very simple. We need to zip all the source code and upload it to a designated location
-(cloud bucket).  
+The gist of cloud function deployment is very simple. We need to zip all the source code and upload it to a designated 
+location (cloud bucket).  
 There is a handy tool we can use to simplify this process, you can read more about it
 [here](https://www.serverless.com/framework/docs/providers/google/).
